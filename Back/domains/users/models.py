@@ -12,7 +12,7 @@ class UserModel(Base):
     id = Column(String(255), unique=True, nullable=False)
     nickname = Column(String(255))
     password = Column(String(255), nullable=False)
-    birth_date = Column(Date)
+    birth_date = Column(String(255))
 
     
 class MovieModel(Base):
@@ -30,6 +30,5 @@ class ShowingsModel(Base):
     theater_name = Column(String(255), nullable=False)
     seat_number = Column(String, nullable=False)
     show_time = Column(String(255), nullable=False)
-    
     movie_id = Column(Integer, ForeignKey('movies.movie_id'))  # 외래 키, 중복된 movie_id 제거
     movie = relationship("MovieModel", backref="showings")  # Movie 테이블과의 관계 설정
