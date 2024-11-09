@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { testMovieInfo } from "../data/testMovieInfo";
 import { Button } from "@mui/material";
@@ -6,6 +6,7 @@ import { movieTimeList } from "../data/movieTimeList";
 import { Seat } from "../component/Seat";
 import { useBottomSheet } from "../hooks/useBottomSheet";
 import { TicketingPage } from "../component/TicketingPage";
+import { cinemaInfo } from "../data/cinemaInfo";
 const Container = styled.div`
   position: relative;
   display: flex;
@@ -62,7 +63,30 @@ export const MovieMainPage = () => {
   const [movie, setMovie] = useState([]);
   const testData = testMovieInfo;
   const [movieData, setMovieData] = useState({});
-
+  const [cinemaIndex, setCinemaIndex] = useState(0);
+  const [selectedTimeIndex, setSelectedTimeIndex] = useState(0);
+  const [focusTimeState, setFocusTimeState] = useState([
+    {
+      id: 0,
+      isFocus: true,
+    },
+    {
+      id: 1,
+      isFocus: false,
+    },
+    {
+      id: 2,
+      isFocus: false,
+    },
+    {
+      id: 3,
+      isFocus: false,
+    },
+    {
+      id: 4,
+      isFocus: false,
+    },
+  ]);
   const { open, setOpen } = useBottomSheet();
   const toggleDrawer = (open) => (event) => {
     if (
@@ -73,42 +97,39 @@ export const MovieMainPage = () => {
     }
     setOpen(open);
   };
-  const onClickCinemaButton = () => {};
-  const onClickTicketing = () => {};
+  const onClickTimeButton = (index) => {
+    const newArray = [...focusTimeState];
+    console.log("newArray", newArray);
+    const focusingIndex = newArray.findIndex((v) => v.isFocus === true);
+    newArray[focusingIndex].isFocus = false;
+    console.log(newArray);
+    console.log(cinemaInfo[cinemaIndex][selectedTimeIndex]);
+    newArray[index].isFocus = true ? (newArray[index].isFocus = true) : null;
+
+    setSelectedTimeIndex(index);
+    setFocusTimeState(newArray);
+  };
+
   return (
     <Container>
       <ButtonContainer>
-        <Button
-          variant="contained"
-          style={{
-            width: 200,
-            height: 200,
-            marginRight: "25px",
-          }}
-        >
-          A
-        </Button>
-
-        <Button
-          style={{
-            width: 200,
-            height: 200,
-            marginRight: "25px",
-          }}
-          variant="contained"
-        >
-          B
-        </Button>
-        <Button
-          style={{
-            width: 200,
-            height: 200,
-            marginRight: "25px",
-          }}
-          variant="contained"
-        >
-          C
-        </Button>
+        {cinemaInfo.map((v, i) => {
+          return (
+            <Button
+              onClick={() => {
+                setCinemaIndex(i);
+              }}
+              variant="contained"
+              style={{
+                width: 200,
+                height: 200,
+                marginRight: "25px",
+              }}
+            >
+              {v[0].name}
+            </Button>
+          );
+        })}
       </ButtonContainer>
       <InfoContainer>
         <TimeContainer>
@@ -120,6 +141,9 @@ export const MovieMainPage = () => {
                   height: 50,
                   marginRight: "25px",
                 }}
+                onClick={() => {
+                  onClickTimeButton(index);
+                }}
                 variant="contained"
               >
                 {value} - {movieTimeList[index + 1]}
@@ -128,30 +152,37 @@ export const MovieMainPage = () => {
           })}
         </TimeContainer>
       </InfoContainer>
-      <MovieInfoContainer>
-        <MovieCard>
-          <MovieImgContainer>
-            <MovieImage src={testMovieInfo[0].img_url}></MovieImage>
-          </MovieImgContainer>
-        </MovieCard>
-      </MovieInfoContainer>
-      <SeatContainer>
-        <Seat />
-        <p>screen</p>
-        <Button
-          style={{
-            width: 100,
-            height: 40,
-          }}
-          variant="contained"
-        >
-          예매하기
-        </Button>
-        <Button variant="contained" onClick={toggleDrawer(true)}>
-          Open Bottom Sheet
-        </Button>
-        <TicketingPage open={open} toggleDrawer={toggleDrawer} />
-      </SeatContainer>
+      {cinemaInfo[cinemaIndex][selectedTimeIndex].isReserve ? (
+        <>
+          <MovieInfoContainer>
+            <MovieCard>
+              <MovieImgContainer>
+                <MovieImage src={testMovieInfo[0].img_url}></MovieImage>
+              </MovieImgContainer>
+            </MovieCard>
+          </MovieInfoContainer>
+          <SeatContainer>
+            <Seat />
+            <p>screen</p>
+          </SeatContainer>
+          <Button
+            style={{
+              width: 100,
+              height: 40,
+            }}
+            variant="contained"
+          >
+            예매하기
+          </Button>
+        </>
+      ) : (
+        <>
+          <Button variant="contained" onClick={toggleDrawer(true)}>
+            Open Bottom Sheet
+          </Button>
+          <TicketingPage open={open} toggleDrawer={toggleDrawer} />
+        </>
+      )}
     </Container>
   );
 };
