@@ -26,13 +26,16 @@ const SeatButton = styled.button`
   }
 `;
 
-export const Seat = () => {
-  const testData = [
-    0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-  ];
+export const Seat = ({
+  setCinemaList,
+  cinemaList,
+  cinemaIndex,
+  selectedTimeIndex,
+}) => {
   // 30개의 좌석을 담은 배열 생성 및 초기화
-  const [seats, setSeats] = useState(testData);
+  const [seats, setSeats] = useState(
+    cinemaList[cinemaIndex][selectedTimeIndex].seat_numbers
+  );
   const onClickButton = (index) => {
     const newArray = [...seats];
     if (1 === seats[index]) return;
@@ -41,7 +44,11 @@ export const Seat = () => {
       newArray[findIndex] = 0;
     }
     newArray[index] = 2;
+    console.log(seats);
     setSeats(newArray); //2는 사용자가 찍은거
+    const newCinema = [...cinemaList];
+    cinemaList[cinemaIndex][selectedTimeIndex].seat_numbers = seats;
+    setCinemaList(newCinema);
   };
   // 좌석 클릭 시 선택 상태 토글
 
