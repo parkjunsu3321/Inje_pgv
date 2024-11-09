@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { loginAPI } from "../services/loginApi";
+import { useNavigate } from "react-router-dom";
 
 export const Signup = () => {
   const [name, setName] = useState("");
@@ -9,22 +11,41 @@ export const Signup = () => {
   const [password, setPassword] = useState("");
   const [birthdate, setBirthdate] = useState(null); // 초기값을 null로 설정
   const [errorMessage, setErrorMessage] = useState("");
-
+  const navigate = useNavigate();
+  const { resisterUserData } = loginAPI();
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 +1
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
   const handleSignup = () => {
     if (!name || !nickname || !username || !password || !birthdate) {
       setErrorMessage("모든 필드를 채워주세요.");
       return;
     }
+    const postData = {
+      serial_number: 0,
+      id: username,
+      name: name,
+      nickname: nickname,
+      password: password,
+      birth_date: formatDate(birthdate),
+    };
 
-    alert("회원가입 성공!");
-    setErrorMessage("");
+    resisterUserData(postData).then((v) => {
+      if (v) navigate("/");
+    });
+    // alert("회원가입 성공!");
+    // setErrorMessage("");
 
-    // 모든 입력 필드 초기화
-    setName("");
-    setNickname("");
-    setUsername("");
-    setPassword("");
-    setBirthdate(null);
+    // // 모든 입력 필드 초기화
+    // setName("");
+    // setNickname("");
+    // setUsername("");
+    // setPassword("");
+    // setBirthdate(null);
   };
 
   return (
@@ -86,7 +107,6 @@ export const Signup = () => {
             showYearDropdown
             scrollableYearDropdown
             yearDropdownItemNumber={100} // 과거 100년까지 선택 가능
-            
           />
         </div>
 
