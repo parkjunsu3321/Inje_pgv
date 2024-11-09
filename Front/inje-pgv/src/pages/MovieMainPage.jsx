@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { testMovieInfo } from "../data/testMovieInfo";
 import { Button } from "@mui/material";
 import { movieTimeList } from "../data/movieTimeList";
+import { Seat } from "../component/Seat";
+import { useBottomSheet } from "../hooks/useBottomSheet";
+import { TicketingPage } from "../component/TicketingPage";
 const Container = styled.div`
   position: relative;
   display: flex;
@@ -50,12 +53,28 @@ const TimeContainer = styled.div`
 const MovieInfoContainer = styled.div`
   border: 1px solid black;
 `;
-
+const SeatContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
 export const MovieMainPage = () => {
   const [movie, setMovie] = useState([]);
   const testData = testMovieInfo;
   const [movieData, setMovieData] = useState({});
 
+  const { open, setOpen } = useBottomSheet();
+  const toggleDrawer = (open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setOpen(open);
+  };
+  const onClickCinemaButton = () => {};
+  const onClickTicketing = () => {};
   return (
     <Container>
       <ButtonContainer>
@@ -90,17 +109,6 @@ export const MovieMainPage = () => {
         >
           C
         </Button>
-        {/* {testData.map((value) => {
-          console.log(value);
-          return (
-            <MovieCard>
-              <MovieImgContainer>
-                <MovieImage src={value.img_url}></MovieImage>
-              </MovieImgContainer>
-              <div>??</div>
-            </MovieCard>
-          );
-        })} */}
       </ButtonContainer>
       <InfoContainer>
         <TimeContainer>
@@ -127,6 +135,23 @@ export const MovieMainPage = () => {
           </MovieImgContainer>
         </MovieCard>
       </MovieInfoContainer>
+      <SeatContainer>
+        <Seat />
+        <p>screen</p>
+        <Button
+          style={{
+            width: 100,
+            height: 40,
+          }}
+          variant="contained"
+        >
+          예매하기
+        </Button>
+        <Button variant="contained" onClick={toggleDrawer(true)}>
+          Open Bottom Sheet
+        </Button>
+        <TicketingPage open={open} toggleDrawer={toggleDrawer} />
+      </SeatContainer>
     </Container>
   );
 };
