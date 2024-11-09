@@ -9,7 +9,8 @@ class DefaultConfig(BaseSettings):
     postgresql_table: str = os.getenv("POSTGRESQL_TABLE", "pgv")
     postgresql_user: str = os.getenv("POSTGRESQL_USER", "root")
     postgresql_password: str = os.getenv("POSTGRESQL_PASSWORD", "1234")
-
+    movie_api_key: str = os.getenv("MOVIE_API_KEY", "0878b3e586d2b43cabce61aec20da98a")
+    img_api_key:str = os.getenv("IMG_API_KEY", "3fe4aa745646d87e505640e8e7baa642")
     jwt_secret_key: str = os.getenv(
         "JWT_SECRET_KEY",
         "5c2fea6305c8c209714e73b265958703e65c4b40dec4c388dddac06f3f791ec7",
