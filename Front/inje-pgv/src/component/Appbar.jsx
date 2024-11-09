@@ -51,7 +51,7 @@ export const Appbar = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
-            variant="h6"
+            variant="h4"
             noWrap
             component="a"
             href="#app-bar-with-responsive-menu"
@@ -65,7 +65,7 @@ export const Appbar = () => {
               textDecoration: "none",
             }}
           >
-            LOGO
+            PGV
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
