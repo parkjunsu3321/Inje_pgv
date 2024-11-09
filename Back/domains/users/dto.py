@@ -8,7 +8,7 @@ class User(BaseModel):
     name: str
     nickname: str
     password: str
-    birth_date: date
+    birth_date: str
 
 class LoginUser(BaseModel):
     id: str
@@ -21,8 +21,15 @@ class Movie(BaseModel):
     audience_count: int
 
 class Showings(BaseModel):
-    serial_number: Optional[int] = None
     theater_name: str
-    seat_number: str
-    show_time: str
     movie_info: Movie
+
+class InputDTO(BaseModel):
+    theater_name:str
+    show_time:list
+    seat_number:list
+
+class NewInputDTO(BaseModel):
+    theater_name:str
+    show_time:str
+    seat_number:str
