@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException, status
-from .models import UserModel
+from .models import UserModel, ShowingsModel
 from dependencies.auth import hash_password
 from domains.users.dto import User
 
@@ -25,3 +25,7 @@ class UserRepository:
         self.db.commit()
         self.db.refresh(db_user)
         return db_user
+    
+    def get_seat(self, type:str):
+        showings = self.db.query(ShowingsModel).filter(ShowingsModel.theater_name == type).first()
+        return showings

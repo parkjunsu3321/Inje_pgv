@@ -4,7 +4,7 @@ from dependencies.database import Session
 from dependencies.auth import hash_password, verify_password, create_access_token
 from .repositories import UserRepository
 from .models import UserModel, LoginUser
-from domains.users.dto import User
+from domains.users.dto import User, Showings
 
 
 class UserService(Service):
@@ -30,5 +30,7 @@ class UserService(Service):
     def register_user(self, user: User):
         # 비즈니스 로직 처리 (필요시 추가)
         return self.user_repo.add_user(user)  # 레포지토리의 메서드를 호출하여 데이터베이스에 저장
-
-
+    
+    def get_seat(self, seattype:str):
+        showings = self._user_repository.get_seat(type=seattype)
+        return showings
