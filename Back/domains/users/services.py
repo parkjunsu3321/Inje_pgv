@@ -12,3 +12,4 @@ class UserService(Service):
         user_repository: UserRepository,
     ):
         self._user_repository = user_repository
+
